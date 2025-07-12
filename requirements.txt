@@ -1,0 +1,7 @@
+streamlit
+opencv-python
+deepface
+pygame
+tensorflow==2.19.0
+tf-keras
+numpy==1.26.4

@@ -1,0 +1,18 @@
+# Ignore Python virtual environments
+moodify-env/
+moodify-web-env/
+moodify38-env/
+
+# Ignore heavy or unnecessary files
+*.pyd
+*.dll
+*.lib
+*.exe
+
+# Python cache
+__pycache__/
+*.pyc
+
+# VS Code settings
+.vscode/
+
