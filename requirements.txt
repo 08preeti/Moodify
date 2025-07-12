@@ -1,6 +1,6 @@
 streamlit
 opencv-python
-deepface
 pygame
-tensorflow==2.13.0
-numpy==1.26.4
+tensorflow==2.10.0
+deepface==0.0.75
+numpy==1.23.5
