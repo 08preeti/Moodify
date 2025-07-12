@@ -10,7 +10,7 @@ pygame.mixer.init()
 # Start webcam
 cap = cv2.VideoCapture(0)
 print("🎥 Webcam is starting...")
-print("😊 Show emotion and press 'q' to detect OR press 's' anytime to stop the music")
+print("😊 Show emotion and press 'q' to detect OR press 's' to stop the music")
 
 while True:
     ret, frame = cap.read()
@@ -29,26 +29,28 @@ while True:
         print("🔍 Detecting emotion...")
         try:
             result = DeepFace.analyze(frame, actions=['emotion'], enforce_detection=False)
-            emotion = result[0]['dominant_emotion']
-            print(f"✅ Detected Emotion: {emotion}")
-            print(f"📊 All emotions: {result[0]['emotion']}")
+            if result and isinstance(result, list):
+                emotion = result[0]['dominant_emotion']
+                print(f"✅ Detected Emotion: {emotion}")
+                print(f"📊 All emotions: {result[0]['emotion']}")
 
-            # Build path to the emotion's folder
-            music_folder = os.path.join("emotion_detector", "music", emotion)
+                music_folder = os.path.join("emotion_detector", "music", emotion.lower())
 
-            if os.path.exists(music_folder):
-                songs = [f for f in os.listdir(music_folder) if f.endswith(".mp3")]
-                if songs:
-                    song_file = random.choice(songs)
-                    song_path = os.path.join(music_folder, song_file)
-                    print(f"🎵 Playing: {song_file}")
+                if os.path.exists(music_folder):
+                    songs = [f for f in os.listdir(music_folder) if f.endswith(".mp3")]
+                    if songs:
+                        song_file = random.choice(songs)
+                        song_path = os.path.join(music_folder, song_file)
+                        print(f"🎵 Playing: {song_file}")
 
-                    pygame.mixer.music.load(song_path)
-                    pygame.mixer.music.play()
+                        pygame.mixer.music.load(song_path)
+                        pygame.mixer.music.play()
+                    else:
+                        print(f"🚫 No .mp3 files in: {music_folder}")
                 else:
-                    print(f"🚫 No .mp3 files in: {music_folder}")
+                    print(f"🚫 No folder found for emotion: {emotion}")
             else:
-                print(f"🚫 No folder found for emotion: {emotion}")
+                print("❌ Could not detect a face or emotion.")
 
         except Exception as e:
             print(f"❌ Error: {e}")
@@ -66,5 +68,6 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+
 
 
