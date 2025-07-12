@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 from deepface import DeepFace
 import tempfile
-import pygame
 import os
 import random
 
@@ -22,9 +21,6 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-# Initialize pygame mixer
-pygame.mixer.init()
 
 # Camera input (built-in in Streamlit)
 img_data = st.camera_input("📸 Capture your image")
@@ -51,20 +47,19 @@ if img_data is not None:
             if songs:
                 song_file = random.choice(songs)
                 song_path = os.path.join(music_folder, song_file)
-                pygame.mixer.music.load(song_path)
-                pygame.mixer.music.play()
-                st.audio(song_path, format='audio/mp3', start_time=0)
 
-                # Add Stop Button
-                if st.button("⏹️ Stop Music"):
-                    pygame.mixer.music.stop()
-                    st.success("🔇 Music stopped.")
+                # Streamlit audio playback
+                audio_file = open(song_path, 'rb')
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format='audio/mp3')
             else:
                 st.warning("⚠️ No songs found in this emotion folder.")
         else:
             st.warning(f"⚠️ Folder not found for emotion: `{emotion}`")
     except Exception as e:
         st.error(f"❌ Error detecting emotion: {e}")
+
+
 
 
 
